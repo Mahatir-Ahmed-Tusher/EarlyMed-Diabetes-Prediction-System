@@ -216,6 +216,4 @@ This project was developed by the following contributors:
 
 Feel free to contribute to this project or report issues via GitHub. Let’s make healthcare more accessible together! 🌟
 
---- 
 
-Let me know if you’d like to make any further adjustments!
