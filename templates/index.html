@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EarlyMed - Diabetes Prediction</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #6a11cb, #2575fc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #fff;
+    }
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      width: 90%;
+      max-width: 600px;
+      text-align: center;
+    }
+    .logo {
+      width: 300px;
+      margin-bottom: 10px;
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+    .description {
+      font-size: 1rem;
+      margin-bottom: 30px;
+      color: #e0e0e0;
+    }
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+    .input-group label {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 5px;
+      color: #fff;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+    }
+    .input-group input::placeholder {
+      color: #ccc;
+    }
+    .tooltip {
+      position: relative;
+      display: inline-block;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 200px;
+      background: rgba(0, 0, 0, 0.8);
+      color: #fff;
+      text-align: center;
+      border-radius: 5px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      margin-left: -100px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+    .predict-button {
+      background: #ff6f61;
+      color: #fff;
+      border: none;
+      padding: 15px 30px;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .predict-button:hover {
+      background: #ff4a3d;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      animation: fadeIn 1s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .loading {
+      display: none;
+      margin-top: 20px;
+      font-size: 1.2rem;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <img src="https://i.postimg.cc/8cfd458T/logo.png" alt="EarlyMed Logo" class="logo">
+
+    <p class="description">
+      EarlyMed is a Senior Design Project developed by a passionate team of students from VIT-AP University. 
+      This system predicts the likelihood of diabetes based on health parameters. 
+      Please note that this is a predictive tool and not a substitute for professional medical advice. 
+      Always consult a doctor for accurate diagnosis and treatment.
+    </p>
+    <form id="predictionForm">
+      <div class="input-group">
+        <label for="pregnancies">Number of Pregnancies (Cis-Woman) <span class="tooltip">?
+          <span class="tooltiptext">Number of times the patient has been pregnant. Normal range: 0-17.</span>
+        </span></label>
+        <input type="number" id="pregnancies" name="pregnancies" placeholder="Enter Pregnancies" required>
+      </div>
+      <div class="input-group">
+        <label for="glucose">Glucose <span class="tooltip">?
+          <span class="tooltiptext">Plasma glucose concentration measures blood sugar levels in mg/dL, typically tested fasting or during an oral glucose tolerance test (OGTT). The normal range is 70–140 mg/dL .</span>
+        </span></label>
+        <input type="number" id="glucose" name="glucose" placeholder="Enter Glucose" required>
+      </div>
+      <div class="input-group">
+        <label for="blood_pressure">Diastolic Blood Pressure <span class="tooltip">?
+          <span class="tooltiptext">Diastolic blood pressure is the pressure in your arteries when your heart rests between beats, measured as the second number in a blood pressure reading (e.g., 80 in 120/80). The normal range is 60–90 mm Hg . Higher values may indicate hypertension, a risk factor for diabetes and heart disease.</span>
+        </span></label>
+        <input type="number" id="blood_pressure" name="blood_pressure" placeholder="Enter Blood Pressure" required>
+      </div>
+      <div class="input-group">
+        <label for="skin_thickness">Skin Thickness <span class="tooltip">?
+          <span class="tooltiptext">Skin thickness in diabetes testing refers to the measurement of the triceps skin fold thickness, which estimates body fat levels and can indicate insulin resistance. It is tested using calipers to pinch and measure the skinfold at the back of the upper arm. The normal range for skin thickness is typically 10-50 mm , with higher values potentially correlating with increased body fat and diabetes risk.</span>
+        </span></label>
+        <input type="number" id="skin_thickness" name="skin_thickness" placeholder="Enter Skin Thickness" required>
+      </div>
+      <div class="input-group">
+        <label for="insulin">Insulin <span class="tooltip">?
+          <span class="tooltiptext">Serum insulin level measures the amount of insulin in your blood, which helps regulate blood sugar. It is tested through a fasting blood test or during an oral glucose tolerance test (OGTT). The normal range for fasting serum insulin is typically 16-166 pmol/L (2.6–24.9 µU/mL).</span>
+        </span></label>
+        <input type="number" id="insulin" name="insulin" placeholder="Enter Insulin" required>
+      </div>
+      <div class="input-group">
+        <label for="bmi">BMI <span class="tooltip">?
+          <span class="tooltiptext">Body Mass Index (kg/m²). Normal range: 18.5-24.9.</span>
+        </span></label>
+        <input type="number" id="bmi" name="bmi" placeholder="Enter BMI" required>
+      </div>
+      <div class="input-group">
+        <label for="diabetes_pedigree">Diabetes Pedigree Function <span class="tooltip">?
+          <span class="tooltiptext">The Diabetes Pedigree Function (DPF) is a score that estimates the likelihood of developing diabetes based on a person's family history and age. The DPF score ranges from 0.08 to 2.42. </span>
+        </span></label>
+        <input type="number" id="diabetes_pedigree" name="diabetes_pedigree" placeholder="Enter Diabetes Pedigree Function" required>
+      </div>
+      <div class="input-group">
+        <label for="age">Age <span class="tooltip">?
+          <span class="tooltiptext">Patient’s age in years. Normal range: 20-80.</span>
+        </span></label>
+        <input type="number" id="age" name="age" placeholder="Enter Age" required>
+      </div>
+      <button type="submit" class="predict-button">Predict</button>
+    </form>
+    <div class="loading" id="loading">Predicting...</div>
+    <div class="result" id="result"></div>
+  </div>
+  <script>
+    document.getElementById('predictionForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent default form submission
+
+      // Show loading animation
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('result').innerText = '';
+
+      // Collect form data
+      const formData = new FormData(this);
+
+      // Send POST request to Flask backend
+      fetch('/predict', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.text()) // Expect plain text response
+      .then(data => {
+        document.getElementById('result').innerText = `Prediction: ${data}`;
+      })
+      .catch(error => {
+        document.getElementById('result').innerText = 'Error: Unable to get prediction.';
+      })
+      .finally(() => {
+        // Hide loading animation
+        document.getElementById('loading').style.display = 'none';
+      });
+    });
+  </script>
+</body>
+</html>
